@@ -36,12 +36,12 @@ def data_load(corpus, mode='train'):
         f_data = pickle.load(pkl_file)
     else:
         model_word = gensim.models.Word2Vec.load('../file/word2vec_{}'.format(corpus))
-        model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
+        # model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
         vocab_word = model_word.wv.vocab
-        vocab_char = model_char.wv.vocab
+        # vocab_char = model_char.wv.vocab
         f_data = []
         for l, s, s_raw in data_list:
-            f_data.append((l, [vocab_word.get(word, IntegerIndex(-1)).index for word in s], [vocab_char.get(c, IntegerIndex(-1)).index for c in s_raw], s_raw))
+            f_data.append((l, [vocab_word.get(word, IntegerIndex(-1)).index for word in s], [0 for c in s_raw], s_raw))
         output = open('../file/TNT_{}_{}.pkl'.format(corpus, mode), 'wb')
         pickle.dump(f_data, output, -1)
         output.close()
@@ -71,13 +71,13 @@ def data_preprocess(corpus, mode='train', val_ratio=0.2):
             f_data = pickle.load(pkl_file)
         else:
             model_word = gensim.models.Word2Vec.load('../file/word2vec_{}'.format(corpus))
-            model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
+            # model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
             vocab_word = model_word.wv.vocab
-            vocab_char = model_char.wv.vocab
+            # vocab_char = model_char.wv.vocab
             f_data = []
             for l, s, s_raw in data_list:
                 f_data.append((l, [vocab_word.get(word, IntegerIndex(-1)).index for word in s],
-                               [vocab_char.get(c, IntegerIndex(-1)).index for c in s_raw], s_raw))
+                               [0 for c in s_raw], s_raw))
             output = open('../file/CNT_{}_{}.pkl'.format(corpus, mode), 'wb')
             pickle.dump(f_data, output, -1)
             output.close()
@@ -102,13 +102,13 @@ def data_preprocess(corpus, mode='train', val_ratio=0.2):
             f_data = pickle.load(pkl_file)
         else:
             model_word = gensim.models.Word2Vec.load('../file/word2vec_{}'.format(corpus))
-            model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
+            # model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
             vocab_word = model_word.wv.vocab
-            vocab_char = model_char.wv.vocab
+            # vocab_char = model_char.wv.vocab
             f_data = []
             for l, s, s_raw in data_list:
                 f_data.append((l, [vocab_word.get(word, IntegerIndex(-1)).index for word in s],
-                               [vocab_char.get(c, IntegerIndex(-1)).index for c in s_raw], s_raw))
+                               [0 for c in s_raw], s_raw))
             output = open('../file/CNT_{}_{}.pkl'.format(corpus, mode), 'wb')
             pickle.dump(f_data, output, -1)
             output.close()
@@ -158,9 +158,9 @@ def FCT_preprocess(corpus, mode='train', val_ratio=0.1, max_len=512):
             label_mapping = pickle.load(label_mapping)
         assert len(file_names) == 20
         model_word = gensim.models.Word2Vec.load('../file/word2vec_{}'.format(corpus))
-        model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
+        # model_char = gensim.models.Word2Vec.load('../file/word2vec_wiki')
         vocab_word = model_word.wv.vocab
-        vocab_char = model_char.wv.vocab
+        # vocab_char = model_char.wv.vocab
         f_data = []
         for file_name in file_names:
             for sample_path in os.listdir('../file/FCT/{}/{}/utf8'.format(mode, file_name)):
@@ -182,7 +182,7 @@ def FCT_preprocess(corpus, mode='train', val_ratio=0.1, max_len=512):
                 assert len(text) > 0
                 s = cw(text)
                 f_data.append((label_mapping[file_name], [vocab_word.get(word, IntegerIndex(-1)).index for word in s],
-                               [vocab_char.get(c, IntegerIndex(-1)).index for c in text], text))
+                               [0 for c in text], text))
         output = open('../file/FCT_{}_{}.pkl'.format(corpus, mode), 'wb')
         pickle.dump(f_data, output, -1)
         output.close()
